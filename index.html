@@ -10,7 +10,7 @@
 	<div id="game" class="col-md-4">
 		<div id="form">
 			<label for="text">Name:</label>
-			<input type="text" class="form-control"id="name-input"></input>
+			<input type="text" class="form-control" id="name-input"></input>
 			<button class="submit">Go!!</button>
 		</div>
 		<button id="rock" class="submitInfo">Rock</button>
@@ -21,9 +21,25 @@
 			<li id="wins"></li>
 			<li id="ties"></li>
 		</ul>
-		<div id="comments">
+		<!-- <div id="comments">
 			<input type="text" class="form-control" id="comment-input"></input>
 			<button class="submit">Send</button>
+		</div> -->
+		<div id="comments">
+		  <header>Comments</header>
+
+		  <div>
+		    <label for="nameInput">Name: </label>
+		    <input type='text' id="nameInput" placeholder='enter your name...'>
+		  </div>
+
+		  <ul id='messages' class="chat-messages"></ul>
+
+		  <footer>
+		    <input type='text' id='comment-input'  placeholder='Type a message...'>
+		  </footer>
+
+		  <button class="submit">Send</button>
 		</div>
 	</div>
 <script src="https://code.jquery.com/jquery.js"></script>

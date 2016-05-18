@@ -1,11 +1,18 @@
 
-
-var gameData = new Firebase("https://rps-game2.firebaseio.com/");
+// reference to firebase
+var commentsRef = new Firebase("https://rps-game2.firebaseio.com/Chat");
 
 game = [{
 	"choices" : ["rock","paper", "scissors"],
-	"player" 
+	"player" : ["1", "2"]
 }]
+
+function go() {
+  var name = prompt('Name?', 'Guest');
+  // Consider adding '/<unique id>' if you have multiple games.
+  var gameData = new Firebase("https://rps-game2.firebaseio.com/Players");
+  assignPlayerNumberAndPlayGame(userId, gameRef);
+};
 
 gameData.on("value", function(snapshot) {
 
@@ -57,20 +64,71 @@ gameData.on("value", function(snapshot) {
 			$('#ties').html(ties);
 })
 
+
+  // REGISTER DOM ELEMENTS
+commentsRef.on("value", function(snapshot){
+	var commentField = $('#comment-input').val();
+	var nameField = $('#nameInput').val();
+	var messageList = $('#messages').val();
+})
+
+ commentsRef.limitToLast(10).on('child_added', function (snapshot) {
+    //GET DATA
+    var data = snapshot.val();
+    var name = data.name || "anonymous";
+    var message = data.text;
+
+    //CREATE ELEMENTS MESSAGE & SANITIZE TEXT
+    var messageElement = $("<li>");
+    var nameElement = $("<strong class='example-chat-username'></strong>")
+    nameElement.text(name);
+    messageElement.text(message).prepend(nameElement);
+
+    //ADD MESSAGE
+    messageList.append(messageElement)
+
+    //SCROLL TO BOTTOM OF MESSAGE LIST
+    messageList[0].scrollTop = messageList[0].scrollHeight;
+  });
+
+
+$(".submit").on("click", function() {
+	var name = $('#name-input').val().trim();
+	var currentWins = wins;
+	var currentLosses = loses;
+	var currentTies = ties;
+	var comment = commentField.val();
+
+		gameData.push({
+		name: name,
+		currentWins : currentWins,
+		currentLosses : currentLosses,
+		currentTies : currentTies
+	})
+
+		commentsRef.push({
+		name:name, 
+		text:comment
+	});
+      	commentField.val('');
+
+		return false;
+});
 // gameData.orderByChild("rock").equalTo(rock).on("child_added", function(snapshot) {
 //   console.log(snapshot.key());
 // });
 
-$(".submit").on("click", function() {
-	var name = $('#name-input').val().trim();
-	var comment = $('#comment-input').val().trim();
+// on click button events
 
-		gameData.push({
-		name: name,
-		comment: comment
-	})
-		return false;
-});
+
+
+  // LISTEN FOR KEYPRESS EVENT
+  
+  
+
+  // Add a callback that is triggered for each chat message.
+ 
+
 
 $(".submitInfo").on("click", function() {
 	gameData.set({
@@ -81,3 +139,12 @@ $(".submitInfo").on("click", function() {
 		});
 
 });
+
+// var onComplete = function(error) {
+//   if (error) {
+//     console.log('Synchronization failed');
+//   } else {
+//     console.log('Synchronization succeeded');
+//   }
+// };
+// fredRef.remove(onComplete);
